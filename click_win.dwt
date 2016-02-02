@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{$page_title} </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="zh-CN" />
+		<link rel="stylesheet" href="themes/oppo/css/click/jquery.mobile-1.3.2.min.css">
+		<link rel="stylesheet" href="themes/oppo/css/click/my9.css">
+			<link rel="stylesheet" href="themes/oppo/css/click/time.css" type="text/css" />
+		<script src="themes/oppo/js/click/jquery-1.8.3.min.js"></script>
+		<script src="themes/oppo/js/click/jquery.mobile-1.3.2.min.js"></script>
+<script>
+
+window.setInterval(showalert, 1000); 
+
+	function showalert() 
+	{ 
+		var id;
+		id = $('#aid').val();
+
+		$(document).ready(function(){
+						$.post("click.php",
+						{
+						  act:"winpc",
+						  id:id
+						},
+					function(data,status){
+					var obj=$.parseJSON(data);
+						//alert(obj.aid);
+							//location.reload();
+							//$("#winpc").html("id值:"+obj.id+"aid值"+obj.aid+"用户名"+obj.user_name+"名次"+obj.ranking+"完成用时"+obj.prize_time);
+							//<img style=\"width:30px;position:absolute;left:60px;top:100px;z-index:100;\" src=\"./themes/oppo/images/click/no-1.png\">
+								if(obj.ranking == 1)
+								{
+									$("#winpc").append("<div id=\""+obj.id+"\" class=\"ui-grid-b\" style=\"height:60px;width:100%;padding-top:25px;display:none;background-image:url('./themes/oppo/images/click/pc1.png'); background-repeat:no-repeat;\">"
+						+"<div class=\"ui-block-a\">"+obj.user_name+"</div>"+"<div class=\"ui-block-b\" > 第"+obj.ranking+"名</div>"+"<div class=\"ui-block-c\">"+obj.prize_time+"</div></div>");
+						
+									$("#"+obj.id).fadeIn(3000);
+								}
+								else if(obj.ranking == 2)
+								{
+
+									$("#winpc").append("<div id=\""+obj.id+"\" class=\"ui-grid-b\" style=\"height:60px;width:100%;padding-top:25px;display:none;background-image:url('./themes/oppo/images/click/pc2.png'); background-repeat:no-repeat;\">"
+						+"<div class=\"ui-block-a\">"+obj.user_name+"</div>"+"<div class=\"ui-block-b\"> 第"+obj.ranking+"名</div>"+"<div class=\"ui-block-c\">"+obj.prize_time+"</div></div>");
+
+									$("#"+obj.id).fadeIn(3000);
+								}
+								else if(obj.ranking == 3)
+								{
+									$("#winpc").append("<div id=\""+obj.id+"\" class=\"ui-grid-b\" style=\"height:60px;width:100%;padding-top:25px;display:none;background-image:url('./themes/oppo/images/click/pc3.png'); background-repeat:no-repeat;\">"
+						+"<div class=\"ui-block-a\">"+obj.user_name+"</div>"+"<div class=\"ui-block-b\"> 第"+obj.ranking+"名</div>"+"<div class=\"ui-block-c\">"+obj.prize_time+"</div></div>");
+									$("#"+obj.id).fadeIn(3000);
+								}
+								else
+								{
+									$("#winpc").append("<div id=\""+obj.id+"\" class=\"ui-grid-b\" style=\"height:60px;width:100%;padding-top:25px;background-image:url('./themes/oppo/images/click/pcz.png'); background-repeat:no-repeat;\">"
+						+"<div class=\"ui-block-a\">"+obj.user_name+"</div>"+"<div class=\"ui-block-b\"> 第"+obj.ranking+"名</div>"+"<div class=\"ui-block-c\">"+obj.prize_time+"</div></div>");
+								}
+								//	$("#winpc").append("<li id=\""+obj.id+"\">id值:"+obj.id+"aid值"+obj.aid+"用户名"+obj.user_name+"名次"+obj.ranking+"完成用时"+obj.prize_time+"</li>");
+							
+					
+					});
+			 });
+	} 
+
+//倒计时
+
+	$.fn.p=function(num){
+	var nr=[];
+	nr[0]=[[1,2],[1,3],[1,4],[1,5],[1,6],[5,2],[5,3],[5,4],[5,5],[5,6],[2,1],[3,1],[4,1],[2,7],[3,7],[4,7],[2,5],[3,4],[4,3]];
+	nr[1]=[[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[2,2],[2,7],[4,7]];
+	nr[2]=[[5,7],[4,7],[3,7],[2,7],[1,7],[1,6],[2,5],[3,4],[4,4],[1,2],[2,1],[3,1],[4,1],[5,2],[5,3]];
+	nr[3]=[[1,1],[2,1],[3,1],[4,1],[5,1],[1,6],[2,7],[3,7],[4,7],[4,2],[3,3],[4,4],[5,5],[5,6]];
+	nr[4]=[[1,5],[2,5],[3,5],[4,5],[5,5],[1,4],[2,3],[3,2],[4,1],[4,2],[4,3],[4,4],[4,6],[4,7]];
+	nr[5]=[[1,6],[2,7],[3,7],[4,7],[5,6],[5,5],[5,4],[4,3],[3,3],[2,3],[1,3],[1,2],[1,1],[2,1],[3,1],[4,1],[5,1]];
+	nr[6]=[[2,4],[3,4],[4,4],[5,5],[5,6],[4,7],[3,7],[2,7],[1,6],[1,5],[1,4],[1,3],[2,2],[3,1],[4,1]];
+	nr[7]=[[3,7],[3,6],[3,5],[3,4],[4,3],[5,2],[5,1],[4,1],[3,1],[2,1],[1,1]];
+	nr[8]=[[5,5],[5,6],[4,7],[3,7],[2,7],[1,6],[1,5],[2,4],[3,4],[4,4],[5,3],[5,2],[4,1],[3,1],[2,1],[1,2],[1,3]];
+	nr[9]=[[2,7],[3,7],[4,6],[5,5],[5,4],[5,3],[5,2],[4,1],[3,1],[2,1],[1,2],[1,3],[2,4],[3,4],[4,4]];
+	var po = nr[num];
+	$(this).children('.p').each(function(i){
+		if(i>(po.length-1))$(this).animate({opacity:'hide',left:Math.floor(Math.random()*120-Math.random()*50)+'px',top:Math.floor(Math.random()*160-Math.random()*70)+'px'},1000);
+	})
+	for (var n=0;n<po.length;n++){
+		var left=(po[n][0]-1)*20;
+		var top=(po[n][1]-1)*20;
+		$(this).children('.p').eq(n).animate({opacity:'show',left:left+'px',top:top+'px'},1000);
+	}
+}
+$(function(){
+	var phtml='';
+	for(var i=0; i<20;i++){
+		phtml+='<i class="p"></i>';
+	}
+	$("#hour1").html(phtml);
+	$("#hour2").html(phtml);
+	$("#hour3").html(phtml);
+	$("#min1").html(phtml);
+	$("#min2").html(phtml);
+	$("#sec1").html(phtml);
+	$("#sec2").html(phtml);
+	$('.p').each(function(){
+		$(this).css('top',Math.floor(Math.random()*600-Math.random()*600));
+		$(this).css('left',Math.floor(Math.random()*500-Math.random()*500));
+	});
+
+function add(){
+ sertime = sertime+1;
+ return sertime;
+}
+
+	var last="{$startime}";//自己设定目标时间
+
+    var sertime = {$nowtime};  //服务器初始时间
+   setInterval('changetime("'+last+'")',1000)
+	});
+var h;
+var m;
+var sertime = ({$nowtime}+28800)*1000;  //服务器初始时间
+function changetime(lasttime){
+//console.log(sertime=sertime+1000);
+var d=new Date(sertime=sertime+1000); 
+//console.log(formatDate(d)); 
+		//alert(data);
+
+			var time=new Date(lasttime)-new Date(formatDate(d));
+
+			if(time < 0){
+					$("#mjw1").trigger("click"); //跳转准备开始
+			}
+			time = Math.floor(time/1000);
+			var s = time%60;
+			var s1=Math.floor(s/10);
+			var s2=s-s1*10;
+			$('#sec1').p(s1);
+			$('#sec2').p(s2);
+			if(m==(Math.floor(time/60))%60)return false;
+			m = (Math.floor(time/60))%60;
+			var m1=Math.floor(m/10);
+			var m2=m-m1*10;
+			$('#min1').p(m1);
+			$('#min2').p(m2);
+			if(h==Math.floor(time/3600))return false;
+			h = Math.floor(time/3600);
+			var h1=Math.floor(h/100);
+			var h2=Math.floor((h-h1*100)/10);
+			var h3=h-h1*100-h2*10;
+			$('#hour1').p(h1);
+			$('#hour2').p(h2);
+			$('#hour3').p(h3);
+
+}
+
+
+function formatDate(now) { 
+var year=now.getFullYear(); 
+var month=now.getMonth()+1; 
+var date=now.getDate(); 
+var hour=now.getHours(); 
+var minute=now.getMinutes(); 
+var second=now.getSeconds(); 
+return year+"/"+month+"/"+date+" "+hour+":"+minute+":"+second; 
+} 
+</script>
+
+<head>
+<body>
+
+<div data-role="page" id="pageone" style="background:url(themes/oppo/images/click/_bg.png);text-align: center; margin: 0px; padding: 0px;">
+	<a id="mjw1" href="#pagethree" data-transition="pop">进入六十秒倒计时</a>
+	<div style="height:100px"></div>
+	<input type="hidden" id = "evertime"/>
+
+<div id="time">
+	<div id="hour1"></div>
+	<div id="hour2"></div>
+	<div id="hour3"></div>
+	<div id="po1">
+		<div class="potop"></div>
+		<div class="pobottom"></div>
+	</div>
+	<div id="min1"></div>
+	<div id="min2"></div>
+	<div id="po2">
+		<div class="potop"></div>
+		<div class="pobottom"></div>
+	</div>
+	<div id="sec1"></div>
+	<div id="sec2"></div>
+</div>
+<div style="text-align:center;clear:both">
+</div>
+
+
+</div>
+
+
+
+			
+
+	<div data-role="page" id="pagethree" style="background:url(themes/oppo/images/click/click_ph.jpg);background-size:cover; no-repeat center top; width:100%;  margin:0px auto; min-width:1180px;">
+  <div data-role="content">
+	<input type="hidden" id="aid" value="{$id}" />
+	<input type="hidden" id="full" value="{$is_full}" />
+		<audio src="./themes/oppo/images/click/xintiao.mp3" loop="loop" autoplay="autoplay">
+		Your browser does not support the audio element.
+		</audio>
+    <div id="winpc">
+					   <div class="ui-grid-b text-3d">
+							  <div class="ui-block-a">用户</div>
+							  <div class="ui-block-b">名次</div>
+							  <div class="ui-block-c">时间</div>
+				    </div>
+	</div>
+
+  </div>
+
+
+</body>
+</html>

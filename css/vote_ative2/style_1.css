@@ -1,0 +1,88 @@
+
+body {
+font: normal 14px/1.5 Microsoft YaHei,Helvitica,Verdana,Tohoma,Arial,san-serif;
+color: #000;
+background: #D0D0D0;
+background-size: 288px auto;
+-webkit-user-select: none;
+margin: 0 auto;
+padding: 0;
+list-style: none;
+vertical-align: middle;
+}
+
+.vote {
+margin: 0 auto;
+max-width: 640px;
+min-width: 320px;
+overflow-x: hidden;
+}
+
+.votecontent {
+border: 0;
+box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+-moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+-webkit-border-radius: 12px;
+-moz-border-radius: 12px;
+border-radius: 12px;
+background-color: #FFF;
+margin: 15px 10px;
+padding: 15px 15px 20px 15px;
+}
+
+header, section, footer, hgroup{
+	display:block;
+}
+a {
+	color:#35BFFF;
+	text-decoration:none;
+}
+a:hover, a:active{
+	color:#91DCFF;
+}
+
+
+/* wrapper css */
+
+#container{
+	position:relative;
+	width:100%;
+
+	
+}
+.grid{
+	width:188px;
+	min-height:100px;
+	padding: 15px;
+	background:#fff;
+	margin:8px;
+	font-size:12px;
+	float:left;
+	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	-moz-box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	-webkit-box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	
+	-webkit-transition: top 1s ease, left 1s ease;
+	-moz-transition: top 1s ease, left 1s ease;
+	-o-transition: top 1s ease, left 1s ease;
+	-ms-transition: top 1s ease, left 1s ease;
+}
+
+.grid strong {
+	border-bottom:1px solid #ccc;
+	margin:10px 0;
+	display:block;
+	padding:0 0 5px;
+	font-size:17px;
+}/**Ò»Á÷ËØ²ÄÍøwww.16sucai.com**/
+.grid .meta{
+	text-align:right;
+	color:#777;
+	font-style:italic;
+}
+.grid .imgholder img{
+	width:250px;
+	background:#ccc;
+	display:block;
+}

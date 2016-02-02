@@ -1,0 +1,470 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{$subject}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="{$subject}">
+<meta name="keywords" content="{$subject}" />
+
+
+<link href="themes/oppo/css/vote_ative2/vote.css" rel="stylesheet" type="text/css"> 
+<link href="themes/oppo/css/vote_ative2/style.css" rel="stylesheet" type="text/css"> 
+    {* 包含脚本文件 *}
+    {insert_scripts files='transport.js'}
+	<script type='text/javascript' src='themes/oppo/js/jquery.min.js'></script>
+    <script type='text/javascript' src='themes/oppo/js/vote_ative2/jquery.icheck.min.js'></script>
+
+    
+    
+<style>
+#vote-img li {width: 50%;float: left;}
+.votecontent .disabled{background: #a9a9a9;border-color: #a1a1a1;}
+
+.beizhu {
+    background-color: #FFF5C5;
+    border: 1px solid #EDE17E;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #F6F6F6;
+    color: #BCA24B;
+    font-size: 14px;
+    line-height: 22px;
+    margin: 11px 0 8px;
+    padding: 4px 10px 5px;
+    text-align: center;
+}
+
+.mengban {position:absolute; top:0; background-color: rgba(227,227,227,.9); background: #E3E3E3; *background-color: #E3E3E3; filter: alpha(opacity=70); opacity:0.7; left:0; width:100%; height:9000px; z-index:10000;}
+
+.deploy_ctype_tip{z-index:1001;width:100%;text-align:center;position:fixed;top:50%;margin-top:-23px;left:0;}.deploy_ctype_tip p{display:inline-block;padding:13px 24px;border:solid #d6d482 1px;background:#f5f4c5;font-size:16px;color:#8f772f;line-height:18px;border-radius:3px;}
+
+</style>
+
+<!-- 处理投票 -->
+	<script>
+	var res;
+	function submit_vote(res){
+		
+		Ajax.call('vote_ative.php?act=addvotenum&ative_id={$ative_id}',  'user_id='+res, changeVoteNum, 'POST', 'JSON');
+		//alert(res);
+		
+	}
+	
+	function changeVoteNum(res1){
+		document.getElementById(res1.user_id).innerHTML = res1.vote_num;
+
+		if(res1.message == 1){
+			alert('您已经投过票啦^_^');
+		}
+		if(res1.message == 2){
+			alert('不能为自己投票');
+		}
+		if(res1.message == 3){
+			alert('请关注"手机一号店"公众账号或登录');
+		}
+		if(res1.message == 4){
+			alert('活动还没有开始');	
+		}
+		if(res1.message == 5){
+			alert('活动已经结束');	
+		}
+		if(res1.message == 6){
+			alert('您已为此选手投票');
+		}
+	}
+	/**处理回复*/
+	var r_id;
+	var message
+		function submit_replay(r_id){
+		message = document.getElementById("r_"+r_id).value;	
+		Ajax.call('vote_ative.php?act=inser_r&aid={$ative_id}',  'id='+r_id + '&message='+message, changeReplay, 'POST', 'JSON');
+		//alert(res);
+		}
+		
+		function changeReplay(replay){
+		document.getElementById(replay.id).innerHTML = replay.content_r;	
+		
+		}
+	
+	/****更改显示状态****/
+	var rid;
+function change_display(rid){
+	
+
+	if(document.getElementById("c_dis"+rid).style.display == "block"){
+		document.getElementById("c_dis"+rid).style.display = "none";
+	}else{
+		document.getElementById("c_dis"+rid).style.display = "block";
+	}
+
+	
+}
+
+/****判断上传是否为空 start********/
+function is_null(){
+	var works_name = document.getElementById('works_name').value;
+	var user_pid = document.getElementById('user_pid').value;
+	var brief = document.getElementById('brief').value;
+	if(works_name == ''){
+		alert('请填真实姓名');
+		return false;
+		}
+	if(brief == ''){
+		alert('请填写简介');
+		return false;
+		}
+	
+	
+	}
+
+
+function is_message(){
+	var message = document.getElementById('message').value;
+	if(message == ''){
+		alert('留言内容不能为空');
+		return false;
+		}
+	
+	
+	}
+
+/****判断上传是否为空 end********/	
+
+function login_module(){//点击登录时，调用的函数
+var mengban=document.getElementById("mengban");
+mengban.className="mengban";
+var divs=document.getElementById("login_module");
+divs.style.display="block";
+}
+
+function close_login(){//关闭弹窗时，调用的函数
+var mengban=document.getElementById("mengban");
+mengban.className=" ";
+document.getElementById("login_module").style.display = "none";
+document.getElementById("register_module").style.display = "none";
+}
+	</script>
+    
+    
+    
+  <script type="text/javascript">  
+var result=document.getElementById("result");  
+var file=document.getElementById("upload");  
+   
+//判断浏览器是否支持FileReader接口  
+if(typeof FileReader == 'undefined'){  
+    result.InnerHTML="<p>你的浏览器不支持FileReader接口！</p>";  
+    //使选择控件不可操作  
+    file.setAttribute("disabled","disabled");  
+}  
+  
+
+</script>  
+    
+</head>
+<body id="vote-img" class="wrap">
+
+<div class=" " id="mengban"> </div>
+
+<div id="login_module" style="display:none;height:200px;width:200px;margin:0 auto; margin-left:23%;border:0px solid #808080;position:absolute;top:130px;z-index:100001;">
+
+
+<dl>
+<dt style="position:relative;top:25px;float:right;"><a onClick="close_login()" href="#"><img name="" src="themes/oppo/images/vote_ative/fancy_close.png" alt=""></a></dt>
+<dd  style="z-index:100002;"><img name="" src="themes/oppo/images/vote_ative/wx_sjyhd.jpg" width="200" height="200" alt=""></dd>
+</dl>
+
+</div>
+
+<div class="vote">
+
+
+<div class="votecontent">
+<!-- {if $act == ''} -->
+<!-- {foreach from=$theme1 item=theme1} -->
+
+  <h2><b>{$theme1.vote_theme}</b></h2>
+
+  <span class="font_take1">{$theme1.vote_start}/{$theme1.vote_end}</span>
+  <p><img width="100%" src="../../{$theme1.them_img}"></p>
+<p>{$theme1.vote_brief}</p>
+<!-- {/foreach} -->
+{if $them}
+ <p class="modus">多选投票，<span class="number">共有<B>{$vote_code_sum}</B>投票</span></p>
+{else}
+ <p class="modus">单选投票，<span class="number">共有<B>{$vote_code_sum}</B>人参与投票</span></p>
+ <!-- {if $user_id != '' && $beusername != ''} -->
+  <p class="beizhu"><span class="number">你投了：  <B>{$beusername}</B></span></p>
+ <!-- {/if} -->
+
+
+ {/if}
+ <ul class="list" id="list">
+<!-- {/if} -->
+<!-- {if $act == 'search'} -->
+
+ <!--搜索图片投票 start--> 
+
+     <div style="float:right">
+     
+     <a href="vote_ative.php?aid={$ative_id}"><input class="button" name="submit" type="button" value="返回"></a>
+     </div>
+	  <div style="float:left">
+   
+     作品简介：{$vote_ative1.brief}
+     </div>
+     
+           <li style="width:100%">
+            <p class="voteimg2">
+                <a>
+                  <img src="{$vote_ative1.thumb480}">
+                </a>
+            </p>
+           
+          <div class="choice_color">
+            <div style="line-height:28px;" class="vote_choice1">&nbsp;&nbsp;&nbsp;{$vote_ative1.num}</div>
+            
+            <div class="vote_choice"><input class="button" onclick="submit_vote({$vote_ative1.user_id});" name="vote" type="button" value="投票" /> </div>
+          </div>
+           <div class="clr"></div>
+            <div id="voteshow1" class="votebar">
+
+         <div class="meter animate">
+			<span style="width: {$vote_ative1.scale}%"><span></span></span>
+		</div>
+              <span class="percentage" style="color:#ffcc00">{$vote_ative1.scale}%<span id="{$vote_ative1.user_id}" class="user">&nbsp;&nbsp;<font color="#fff">{$vote_ative1.ticket_num}</font></span></span>
+            </div>
+        </li> 
+ <div class="clr"></div>
+  <!-- {if $b_message != ''} -->
+  <!-- {foreach from=$b_message item=b_message} -->
+  评论用户：{$b_message.user_name}
+  <br />
+  评论内容：{$b_message.content}
+    <br />
+   <!-- {if $b_message.content_r} -->
+  <span id="{$b_message.id}" ><font color="#FF0000">作者回复：</font>{$b_message.content_r}</span>
+    <!-- {/if} -->
+    <span id="{$b_message.id}" ></span>
+    <!-- {if $replay} -->
+    <form action="vote_ative.php?act=inser_r&id={$b_message.id}&aid={$ative_id}" method="post" onSubmit="">
+  <font color="#FF0000"><input class="button" onClick="change_display({$b_message.id});" name="" type="button" value="回复"></font>
+
+  <div id="c_dis{$b_message.id}" style="display:none"><textarea id="r_{$b_message.id}" name="message" cols="40" rows="5" wrap="physical"></textarea><input onClick="submit_replay({$b_message.id});" class="button" name="" type="button" value="确定"></div>
+  </form>
+  <!-- {/if} -->
+      <br />
+     
+  <!-- {/foreach} -->
+  <!-- {/if} -->
+  <br />
+      <!-- {if !$replay} -->
+<form action="vote_ative.php?act=inser_m&aid={$ative_id}" method="post" onSubmit="return is_message();">
+<p align="center">
+<textarea id="message" name="message" cols="40" rows="10" wrap="physical"></textarea>
+<br />
+<input name="b_uid" type="hidden" value="{$vote_ative1.user_id}">
+<input name="is_replay" type="hidden" value="{$replay}">
+
+  <input class="button" name="submit" type="submit" value="评论">
+
+</p>
+</form>
+  <!-- {/if} -->
+   <!--搜索图片投票 end--> 
+<!-- {/if} -->
+
+<!-- 在线留言 satrt -->
+<!-- {if $act == 'message'} -->
+     <div style="float:right">
+
+
+     <a href="vote_ative.php?aid={$ative_id}"><input class="button" name="submit" type="button" value="返回"></a>
+     </div>
+     <div style="float:left">
+	     <!-- {if $replay} -->
+	 状态: {if $vote_ative1.state == 0}等待审核{elseif $vote_ative1.state == 1}通过{elseif $vote_ative1.state == 2}审核失败
+		<a href="vote_ative.php?act=image_up&aid={$ative_id}&v=0">重新上传</a>
+		<br />
+     报名时间：{$vote_ative1.sign_time}
+			   {/if}
+		<!-- {/if} -->
+
+    <br />
+     作品简介：{$vote_ative1.brief}
+     </div>
+     
+
+     
+        <li style="width:100%">
+            <p class="voteimg2">
+               
+                  <img src="{$vote_ative1.thumb480}">
+           
+            </p>
+           {if $vote_ative1.state == 1}
+          <div class="choice_color">
+            <div style="line-height:28px;" class="vote_choice1">&nbsp;&nbsp;&nbsp;{$vote_ative1.num}</div>
+ 
+            <div class="vote_choice"><input class="button" onclick="submit_vote({$vote_ative1.user_id});" name="vote" type="button" value="投票" /> </div>
+
+          </div>
+           <div class="clr"></div>
+            <div id="voteshow1" class="votebar">
+
+         <div class="meter animate">
+			<span style="width: {$vote_ative1.scale}%"><span></span></span>
+		</div>
+              <span class="percentage" style="color:#ffcc00">{$vote_ative1.scale}%<span id="{$vote_ative1.user_id}"  style="color:#fff" >&nbsp;&nbsp;{$vote_ative1.ticket_num}</span></span>
+            </div>
+			{/if}
+        </li> 
+  <div class="clr"></div>
+  <!-- {if $b_message != ''} -->
+  <!-- {foreach from=$b_message item=b_message} -->
+  评论内容：{$b_message.content}
+    <br />
+   <!-- {if $b_message.content_r} -->
+  <span id="{$b_message.id}" ><font color="#FF0000">作者回复：</font>{$b_message.content_r}</span>
+    <!-- {/if} -->
+    <span id="{$b_message.id}" ></span>
+    <!-- {if $replay} -->
+    <form action="vote_ative.php?act=inser_r&id={$b_message.id}&aid={$ative_id}" method="post" onSubmit="">
+  <font color="#FF0000"><input class="button" onClick="change_display({$b_message.id});" name="" type="button" value="回复"></font>
+
+  <div id="c_dis{$b_message.id}" style="display:none"><textarea id="r_{$b_message.id}" name="message" cols="40" rows="5" wrap="physical"></textarea><input onClick="submit_replay({$b_message.id});" class="button" name="" type="button" value="确定"></div>
+  </form>
+  <!-- {/if} -->
+      <br />
+     
+  <!-- {/foreach} -->
+  <!-- {/if} -->
+  <br />
+      <!-- {if !$replay} -->
+<form action="vote_ative.php?act=inser_m&aid={$ative_id}" method="post" onSubmit="return is_message();">
+<p align="center">
+<textarea id="message" class="comments" name="message" cols="30" rows="6" wrap="physical"></textarea>
+
+<br />
+<input name="b_uid" type="hidden" value="{$vote_ative1.user_id}">
+<input name="is_replay" type="hidden" value="{$replay}">
+
+  <input class="button" name="submit" type="submit" value="评论">
+
+</p>
+</form>
+  <!-- {/if} -->
+<!-- {/if} -->
+<!-- 在线留言 end -->
+	<!-- 上传图片界面 -->
+<!-- {if $act == 'image_up' || $act == 'image_up2'} -->
+<div style="float:left">
+<h2>参赛说明</h2>
+</div>
+     <div style="float:right">
+     
+     <a href="vote_ative.php?aid={$ative_id}"><input class="button" name="submit" type="button" value="返回"></a>
+     </div>
+  <div class="clr"></div> 
+<p class="font_take">{$play}</p><br />
+<form action="vote_ative.php?act=imageuped&aid={$ative_id}" method="post" enctype="multipart/form-data" onSubmit="return is_null();">
+  <p><font class="font_take">真实名字:</font>
+    <label for="textfield"></label>
+    <input class="logintxt" type="text" name="works_name" id="works_name" /><font color="red" size="1">不公开-领奖核对</font>
+  </p>
+  <p><font class="font_take">作品简介:</font><br />
+    <label for="textfield2"></label>
+    <textarea id="brief" class="comments" rows="10" cols="40" name="brief"></textarea>
+  </p>
+  <br />
+
+ 
+<div class="line"> 
+<span class="span"> 
+
+ 
+    <input name="" type="text" id="viewfile"
+ onmouseout="document.getElementById('upload').style.display='none';"
+ class="inputstyle" /> 
+</span> <label for="unload"
+ onmouseover="document.getElementById('upload').style.display='block';"
+ class="file1">浏览...</label> 
+<input type="file"
+ onchange="document.getElementById('viewfile').value=this.value;this.style.display='none';"
+ class="file" name="img" id="upload" /> 
+
+
+
+</div> 
+
+<div class="clr"></div>
+<font color="red" size="1" ><a href="vote_ative.php?act=imageuped&aid={$ative_id}">不能上传图片?</a></font>
+  <br />
+              {if $user_id == ''}
+               <p align="center"><a href="#"><input onclick="login_module();" name="" type="submit" class="button" value="提交作品" /></a></p>
+              {else}
+              <p align="center"><input name="" type="submit" class="button" value="提交作品" /></p>
+              {/if}
+</form>
+
+
+<!-- {/if} -->
+
+
+<!-- {if $act == ''} -->
+
+    <!-- {foreach from=$vote_ative item=vote_ative} -->
+     <!--图片投票开始--> 
+     
+     
+        <li>
+            <p class="voteimg2">
+                <a href="vote_ative.php?act=message&uid={$vote_ative1.user_id}&aid={$ative_id}&b_uid={$vote_ative.user_id}">
+                  <img src="{$vote_ative.img}">
+                </a>
+            </p>
+           
+          <div class="choice_color">
+            <div style="line-height:28px;" class="vote_choice1">&nbsp;&nbsp;&nbsp;{$vote_ative.num}</div>
+            {if $user_id == ''}
+             <div class="vote_choice"><a href="#"><input class="button" onclick="login_module();" name="vote" type="button" value="投票" /></a> </div>
+            {else}
+            <div class="vote_choice"><input class="button" onclick="submit_vote({$vote_ative.user_id});" name="vote" type="button" value="投票" /> </div>
+          	{/if}
+          </div>
+           <div class="clr"></div>
+            <div id="voteshow1" class="votebar">
+
+         <div class="meter animate">
+			<span id="specil" style="width: {$vote_ative.scale}%"><span></span></span>
+		</div>
+              <span class="percentage" style="color:#ffcc00">{$vote_ative.scale}%&nbsp;&nbsp;<span style="color:#FFF" id="{$vote_ative.user_id}" class="user">{$vote_ative.ticket_num}</span></span>
+            </div>
+        </li> 
+            <!-- {/foreach} -->  
+<!-- {/if} -->   
+  <div class="clr"></div>
+
+  </div>
+ </ul>
+ 		<!-- {if $act != 'image_up'} -->
+			{if $user_id == ''}
+				{if $now_time < $sign_end}
+				<a onclick="alert('请关注“手机一号店”公众账号或登录')" class="pxbtn">参加赛事</a>  
+			  {/if}
+            {else}
+				{if $now_time < $sign_end}
+              <a href="vote_ative.php?act=image_up&aid={$ative_id}" class="pxbtn">参加赛事</a>  
+			    {/if}
+            {/if}
+         <!-- {/if} -->
+              </div>
+
+
+</div>
+
+</body>
+</html>

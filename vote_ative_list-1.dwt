@@ -1,0 +1,341 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" ><!--更好响应移动终端-->
+<title>{$subject}</title>
+<meta name="description" content="{$subject}">
+<meta name="keywords" content="{$subject}" />
+<style type="text/css">
+body, ul, li, h3 { margin: 0; padding: 0; list-style: none;}
+/*瀑布流布局样式*/
+#lxf-box { position: relative;margin-left:-2%;margin-top:20px; }
+#lxf-box li { position: absolute; background: #fff;margin-right:2%;margin-left:2%; top: 0; }
+
+#lxf-box li img { width: 100%; height: auto; display: block; border: 0 }
+/*css3动画*/
+li {width: 48%;  }
+
+.mengban {position:absolute; top:0; background-color: rgba(227,227,227,.9); background: #E3E3E3; *background-color: #E3E3E3; filter: alpha(opacity=70); opacity:0.7; left:0; width:100%; height:9000px; z-index:10000;}
+</style>
+<link href="themes/oppo/css/vote_ative2/vote.css" rel="stylesheet" type="text/css"> 
+<link href="themes/oppo/css/vote_ative2/style.css" rel="stylesheet" type="text/css"> 
+
+<link href="themes/oppo/css/vote_ative2/bootstrap.css" rel="stylesheet" type="text/css"> 
+<link href="themes/oppo/css/vote_ative2/bootstrap-responsive.css" rel="stylesheet" type="text/css"> 
+<script type="text/javascript" src="{$ectouch_themes}/js/jquery-1.4.4.min.js"></script>
+    {* 包含脚本文件 *}
+    {insert_scripts files='transport.js'}
+
+
+
+<script type='text/javascript' src='themes/oppo/js/bootstrap.js'></script>
+<script type="text/javascript">
+<!-- 处理投票 -->
+
+	var res;
+	function submit_vote(res){
+		
+		Ajax.call('vote_ative.php?act=addvotenum&ative_id={$ative_id}',  'user_id='+res, changeVoteNum, 'POST', 'JSON');
+		//alert(res);
+		
+	}
+	
+	function changeVoteNum(res1){
+		document.getElementById(res1.user_id).innerHTML = res1.vote_num;
+			{if $user_id != ''}
+		if(res1.beusername == ''){
+		document.getElementById("beusername").innerHTML = '<p   class=\"beizhu\"><span class=\"number\">你投了：  <B>'+res1.beusername+'</B></p>';
+		}
+		{/if}
+		document.getElementById("vote_code_sum").innerHTML = res1.vote_code_sum;
+		document.getElementById("scale"+res1.user_id).innerHTML = res1.scale;
+		$('span[id="c'+res1.user_id+'"]').css("width",res1.scale+"%");
+		
+		if(res1.message == 1){
+
+			alert('您已经投过票啦^_^');
+
+		}
+		if(res1.message == 2){
+			alert('不能为自己投');
+		}
+		if(res1.message == 3){
+				alert('请关注"手机一号店"公众账号或登录');
+		}
+		if(res1.message == 4){
+					alert('活动还没有开始');
+		}
+		if(res1.message == 5){
+			alert('活动已经结束');
+		}
+		if(res1.message == 6){
+				alert('您已为此选手投票');
+		}
+	}
+	/**处理回复*/
+	var r_id;
+	var message
+		function submit_replay(r_id){
+		message = document.getElementById("r_"+r_id).value;	
+		Ajax.call('vote_ative.php?act=inser_r&aid={$ative_id}',  'id='+r_id + '&message='+message, changeReplay, 'POST', 'JSON');
+		//alert(res);
+		}
+		
+		function changeReplay(replay){
+		document.getElementById(replay.id).innerHTML = replay.content_r;	
+		
+		}
+	
+	/****更改显示状态****/
+	var rid;
+function change_display(rid){
+	
+
+	if(document.getElementById("c_dis"+rid).style.display == "block"){
+		document.getElementById("c_dis"+rid).style.display = "none";
+	}else{
+		document.getElementById("c_dis"+rid).style.display = "block";
+	}
+
+	
+}
+
+/****判断上传是否为空 end********/	
+
+function login_module(){//点击登录时，调用的函数
+var mengban=document.getElementById("mengban");
+mengban.className="mengban";
+var divs=document.getElementById("login_module");
+divs.style.display="block";
+}
+
+function close_login(){//关闭弹窗时，调用的函数
+var mengban=document.getElementById("mengban");
+mengban.className=" ";
+document.getElementById("login_module").style.display = "none";
+document.getElementById("register_module").style.display = "none";
+}
+
+$(function(){
+	var wid=$(window).width();
+	wid=(wid-200)/2;
+	$('#login_module').css("margin-left",wid+'px');
+	
+	})
+
+
+
+
+</script>
+</head>
+<body>
+
+<input type="hidden" name="page" value="{$page}" />
+<input type="hidden" name="size" value="{$size}" />
+<div class=" " id="mengban"> </div>
+
+<div id="login_module" style="display:none;height:200px;width:200px;margin:0 auto;top:40%; border:0px solid #808080;position:fixed;z-index:100001;">
+<dl>
+<dt style="position:relative;top:25px;float:right;"></dt>
+<dd onClick="close_login()" id="write"   style="z-index:100002;"><img name="" src="themes/oppo/images/vote_ative/wx_sjyhd.jpg" alt="">手机一号店</dd>
+</dl>
+</div>
+
+
+<!-- {foreach from=$theme1 item=theme1} -->
+
+  <h4><b>{$theme1.vote_theme}</b></h4>
+
+  <span class="font_take1">{$theme1.vote_start}/{$theme1.vote_end}</span>
+  <p><img width="100%" src="../../{$theme1.them_img}"></p>
+<div style="width:100%">{$theme1.vote_brief}</div>
+<!-- {/foreach} -->
+{if $them}
+ <p class="modus">多选投票，<span class="number">共有<B id="vote_code_sum">{$vote_code_sum}</B>投票</span></p>
+ <p id="beusername"></p>
+{else}
+ <p class="modus">单选投票，<span class="number">共有<B id="vote_code_sum">{$vote_code_sum}</B>人参与投票</span></p>
+ <!-- {if $user_id != '' && $beusername != ''} -->
+  <p class="beizhu"><span class="number">你投了：  <B>{$beusername}</B></span></p>
+ <!-- {/if} -->
+
+   <!-- {if $is_vote != ''} -->
+  <p class="beizhu1"><span class="number">
+ <a href="vote_ative.php?act=message&uid={$user_id}&aid={$ative_id}&b_uid={$user_id}">我的主页</a>
+</span></p>
+<!-- {/if} -->
+ <p id="beusername"></p>
+
+<!-- {/if} -->
+
+<!--搜索区域 -->
+    <div class="vote_se">
+	<form style="margin:0 0 0 0" action="vote_ative.php?act=search&aid={$ative_id}" method="post">
+       <div>
+	   <input  type="text" onfocus="if(this.value=='参赛选手编号') this.value='';" onblur="if(this.value=='') this.value='参赛选手编号';" value="参赛选手编号" style="color:#666; width:71%" size="6" id="s_name" name="vote_num">	
+	   <input style="width: 23%; float:right" name="vote" class="button1" type="submit" value=">>">
+	  </div>
+         </form>
+    </div>
+<!--搜索区域 end-->
+
+ 		<!-- {if $act != 'image_up'} -->
+			{if $user_id == ''}
+				{if $now_time < $sign_end}
+			<a onclick="alert('请关注“手机一号店”公众账号或登录')" class="pxbtn">参加赛事</a>  
+				{/if}
+            {else}
+				{if $now_time < $sign_end}
+              <a href="vote_ative.php?act=image_up&aid={$ative_id}" class="pxbtn">参加赛事</a>  
+			    {/if}
+            {/if}
+         <!-- {/if} -->
+
+<ul id="lxf-box" style="padding-bottom:10px;">
+
+    <!-- {foreach from=$vote_ative item=vote_ative key=k} -->
+  <li><a href="vote_ative.php?act=message&uid={$vote_ative1.user_id}&aid={$ative_id}&b_uid={$vote_ative.user_id}"><img src="{$vote_ative.img}"></a>  
+   <div class="choice_color">
+            <div style="line-height:28px;" class="vote_choice1">&nbsp;&nbsp;&nbsp;{$vote_ative.num}</div>
+			{if $end}
+
+             <div class="vote_choice"><a href="#">{if $k == 0}<img style="width:30px" src="themes/oppo/images/vote_ative/1.png">{/if}
+			 {if $k == 1}
+			 <img style="width:30px" src="themes/oppo/images/vote_ative/2.png">{/if}
+			 {else}
+			{if $end}
+   
+             <div class="vote_choice"><a href="#">{if $k == 0}<img style="width:30px" src="themes/oppo/images/vote_ative/1.png">{/if}
+			 {if $k == 1}
+			 <img style="width:30px" src="themes/oppo/images/vote_ative/2.png">{/if}
+			 {else}
+            <div class="vote_choice"><input class="button" onclick="submit_vote({$vote_ative.user_id});" name="vote" type="button" value="投票" /> </div>
+			{/if}
+          	{/if}
+          </div>
+           <div class="clr"></div>
+         <div id="voteshow1" class="votebar">
+
+         <div class="meter animate">
+			<span id="c{$vote_ative.user_id}" style="width: {$vote_ative.scale}%"><span></span></span>
+		</div>
+       
+              <span style="color:#ffcc00; margin-left:62%; margin-top:-20px;position:absolute; z-index:10"><span id="scale{$vote_ative.user_id}">{$vote_ative.scale}</span>%&nbsp;&nbsp;<span style="color:#FFF" id="{$vote_ative.user_id}" class="user">{$vote_ative.ticket_num}</span></span>
+            
+        </div>
+		
+</li>
+	       
+    <!-- {/foreach} -->  	
+</ul>
+<img id="loading" src="http://img.cool80.com/i/gif/14/39.gif" style="z-index:11111;float:left;position:fixed;left:47.5%;top:97%;width:5%;botttom::0px;display:none;" />
+<script>
+$(document).ready(function(){ 
+var range = 1; //距下边界长度/单位px   
+var totalheight = 0;  
+$(window).scroll(function(){  
+var srollPos = $(window).scrollTop(); //滚动条距顶部距离(页面超出窗口的高度)  
+//console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());  
+//console.log("页面的文档高度 ："+$(document).height());  
+//console.log('浏览器的高度：'+$(window).height());  
+var maxnum = {$page_num}; //设置加载最多次数  
+var page_n=$('input[name="page"]').attr("value");
+totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+
+if(($(document).height()-range) <= totalheight && page_n <= maxnum) 
+      {       
+       mypageno();
+     }  
+});  
+}); 
+
+
+
+function mypageno(){    //mypageno函数名 一定要和action中的第三个参数一致上面有
+		$('#loading').show();
+
+        var size=$('input[name="size"]').attr("value");
+        var page=$('input[name="page"]').attr("value"); //取html原来分页
+
+         $.get("vote_ative.php?aid={$ative_id}", {'act':'adddata','size':size,'page':page}, function(data){
+        if(data){ 
+         eval('vote_ative=' + data + ';');      // 转化json
+        var str="";
+		var num=(page-1)*8+3;
+       for (var i = 0; i < vote_ative[0]['count']; i++) {
+        str+='<li><a href=\"vote_ative.php?act=message&uid={$user_id}&aid={$ative_id}&b_uid='+vote_ative[i]['user_id']+'\"><img  src=\"'+vote_ative[i]['img']+'\"></a>  ';
+		str+='<div class="choice_color"><div style="line-height:28px;" class="vote_choice1">&nbsp;&nbsp;&nbsp;'+vote_ative[i]['num']+'</div>';
+		str+={if $end}
+		 '<div class="vote_choice"><input class="button" name="vote" type="button" value="NO.'+(num+i)+'" /> </div>';
+		 {else}
+
+          '<div class="vote_choice"><input class="button" onclick=\"submit_vote('+vote_ative[i]['user_id']+');\" name="vote" type="button" value="投票" /></div>';
+
+		 {/if}
+		str+='</div><div class="clr"></div><div id="voteshow1" class="votebar"><div class="meter animate">';
+		str+='<span id=\"c'+vote_ative[i]['user_id']+'\" style=\"width: '+vote_ative[i]['scale']+'%\"><span></span></span></div><span style="color:#ffcc00;margin-left:62%;margin-top:-20px;position:absolute; z-index:10"><span id=\"scale'+vote_ative[i]['user_id']+'\" >'+vote_ative[i]['scale']+'</span>%&nbsp;&nbsp;<span style="color:#FFF"id=\"'+vote_ative[i]['user_id']+'\"class="user">'+vote_ative[i]['ticket_num']+'</span></span></div></li>';
+      };
+	
+         $('li').last().after(str);
+		 		$('#loading').hide();
+		 var count=(page-1)*size+1;
+		  liuxiaofan(count);
+		 $('input[name="size"]').attr("value",vote_ative[0]['size']);
+         $('input[name="page"]').attr("value",vote_ative[0]['page']);
+      
+        }else{ 
+        return false; 
+        } 
+         });
+		 return page;
+   }
+</script>
+<script>
+/*
+原理：1.把所有的li的高度值放到数组里面
+     2.第一行的top都为0
+	 3.计算高度值最小的值是哪个li
+	 4.把接下来的li放到那个li的下面
+作者：刘晓帆
+博客地址：[url]http://liuxiaofan.com[/url]
+编写时间：2012年6月9日
+*/
+
+function liuxiaofan(count){//定义成函数便于调用
+var margin = 10;//这里设置间距
+var li=$("li");//这里是区块名称
+var	li_W = li[0].offsetWidth+margin;//取区块的实际宽度（包含间距，这里使用源生的offsetWidth函数，不适用jQuery的width()函数是因为它不能取得实际宽度，例如元素内有pandding就不行了）
+	var h=[];//记录区块高度的数组
+	var n = document.documentElement.offsetWidth/li_W|0;//窗口的宽度除以区块宽度就是一行能放几个区块
+	for(var i = 0;i < li.length;i++) {//有多少个li就循环多少次
+		li_H = li[i].offsetHeight;//获取每个li的高度
+		if(i < n) {//n是一行最多的li，所以小于n就是第一行了
+			h[i]=li_H;//把每个li放到数组里面
+
+			li.eq(i).css("top",0);//第一行的Li的top值为0
+			li.eq(i).css("left",i * li_W);//第i个li的左坐标就是i*li的宽度
+			}
+		else{
+			min_H =Math.min.apply(null,h) ;//取得数组中的最小值，区块中高度值最小的那个
+			minKey = getarraykey(h, min_H);//最小的值对应的指针
+			h[minKey] += li_H+margin ;//加上新高度后更新高度值
+			if (i>count){
+			li.eq(i).css("top",min_H+margin);//先得到高度最小的Li，然后把接下来的li放到它的下面
+			li.eq(i).css("left",minKey * li_W);	//第i个li的左坐标就是i*li的宽度
+			}
+			
+		}
+	}
+}
+/* 使用for in运算返回数组中某一值的对应项数(比如算出最小的高度值是数组里面的第几个) */
+function getarraykey(s, v) {for(k in s) {if(s[k] == v) {return k;}}}
+/*这里一定要用onload，因为图片不加载完就不知道高度值*/
+window.onload = function() {liuxiaofan();};
+/*浏览器窗口改变时也运行函数*/
+window.onresize = function() {liuxiaofan();};
+</script>
+</body>
+</html>
+
+

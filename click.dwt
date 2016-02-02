@@ -1,0 +1,71 @@
+﻿<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>{$page_title}</title>
+		<link rel="stylesheet" href="themes/oppo/css/click/jquery.mobile-1.3.2.min.css">
+		<link rel="stylesheet" href="themes/oppo/css/click/my9.css">
+		<script src="themes/oppo/js/click/jquery-1.8.3.min.js"></script>
+		<script src="themes/oppo/js/click/jquery.mobile-1.3.2.min.js"></script>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" ><!--更好响应移动终端-->
+		<script>
+
+		</script>
+	</head>
+<body>
+	<input type="hidden" id="aid" value="{$id}" />
+	<input type="hidden" id="full" value="{$is_full}" />
+
+
+<div data-role="page" id="pageone" class="bg">
+	    <div data-role="header" >
+			<a href="http://sjyhd.com/" data-role="button" data-icon="home">手机一号店</a>
+			<h1>{$page_title}</h1>
+			 <a href="#home" data-role="button" data-inline="true" data-rel="dialog">规则</a>
+	    </div>
+		<!--音乐播放
+		<audio src="./themes/oppo/images/click/lol5x.mp3" loop="loop" autoplay="autoplay">
+		Your browser does not support the audio element.
+		</audio>
+		-->
+        <a id="prize" href="#pagetwo" data-transition="flip" style="display:none">翻转到第二页</a>
+
+		<div style="marign-top:-100px;" id="rand_c"></div>
+  </div>
+
+
+<div data-role="page" id="pagetwo" class="bgpersonal">
+		  <div data-role="header">
+		  <a href="http://sjyhd.com/" data-role="button" data-icon="home">手机一号店</a>
+					<h1>灵敏的手指之风云榜</h1>
+		 <a href="#" data-role="button">挑战者：{$u_name}</a>
+		  </div>
+		  
+		  <a href="#pageone" style="display:none">返回第一个页面</a>
+				   <div class="ui-grid-b text-3d">
+							  <div class="ui-block-a">名次</div>
+							  <div class="ui-block-b">用户</div>
+							  <div class="ui-block-c">时间</div>
+				   </div>
+<!--  style="width:100%; height:100%;background-image:url('./themes/oppo/images/click/win.png');" -->
+<div id="result">
+
+</div>
+
+
+</div>
+</div> 
+
+
+<div data-role="page" id="home">
+<div data-role="header">
+<h1>规则</h1>
+</div>
+<div data-role="content">
+<p>
+	以最快速度最精准触摸连续由一点到九！祝君游戏愉快
+</p>
+<a href="#pageone" data-role="button" data-inline="true">返回</a>
+</div>
+<script src="themes/oppo/js/click/my9.js"></script>
+	</body>
+</html>
